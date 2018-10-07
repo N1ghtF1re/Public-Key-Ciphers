@@ -1,14 +1,16 @@
 package men.brakh.publicKeyCiphers;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class OpenKeyCiphersMath {
 
-    /*
-     * a^z mod m - возведение a в степень z по модулю m
+    /**
+     * Modular exponentiation
+     * @param a number
+     * @param z power
+     * @param m module
+     * @return a^z mod m
      */
     public static long power(long a, long z, long m)
     {
@@ -26,6 +28,11 @@ public class OpenKeyCiphersMath {
         return x;
     }
 
+    /**
+     * Check for prime numbers
+     * @param x number
+     * @return true if number prime
+     */
     public static Boolean isPrime(long x) {
         for(long i=2;i<=Math.sqrt(x);i++)
         if(x%i==0)
@@ -33,6 +40,12 @@ public class OpenKeyCiphersMath {
         return true;
     }
 
+    /**
+     * Calculate greatest common divisor
+     * @param a first number
+     * @param b second number
+     * @return greatest common divisor of a and b
+     */
     public static long gcd(long a, long b){
         if(b==0)
             return a;
@@ -40,6 +53,11 @@ public class OpenKeyCiphersMath {
     }
 
 
+    /**
+     * Returns the first primitive root
+     * @param p - module
+     * @return primitive root
+     */
     public static int getPrimitive (long p) {
         ArrayList<Long> fact = new ArrayList<Long>();
         long phi = p-1;
@@ -62,6 +80,11 @@ public class OpenKeyCiphersMath {
         return -1;
     }
 
+    /**
+     * Euler function calculation
+     * @param n number
+     * @return Euler function from n
+     */
     public static int phi (int n) {
         int result = n;
         for (int i=2; i*i<=n; ++i)
@@ -75,8 +98,4 @@ public class OpenKeyCiphersMath {
         return result;
     }
 
-
-    public static void main(String[] args) {
-        System.out.println(6 * power(power(8,5, 13), phi(13)-1, 13) % 13);//Math.pow(Math.pow(8,5), phi(13)-1) % 13);
-    }
 }
