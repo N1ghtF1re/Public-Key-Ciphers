@@ -1,0 +1,7 @@
+*.iml
+.idea/
+target/
+*.encoded
+*.decoded
+*.txt
+examples/
