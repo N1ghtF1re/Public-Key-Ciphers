@@ -13,13 +13,16 @@ public class Elgamal {
 
     public Elgamal(long p, long x, long k) {
         if(!OpenKeyCiphersMath.isPrime(p)) {
-            throw new ArithmeticException("Incorrect number P (It should be simple)");
+            throw new ArithmeticException("Incorrect number P (It should be prime)");
         }
         if((x >= p - 1) || (x <= 1)) {
             throw new ArithmeticException("Incorrect number X. (Need: 1 < x < p - 1)");
         }
+        if((k >= p - 1) || (k <= 1)) {
+            throw new ArithmeticException("Incorrect number K. (Need: 1 < k < p - 1)");
+        }
         if(OpenKeyCiphersMath.gcd(p-1, k) != 1) {
-            throw new ArithmeticException("Incorrect number X. (Need: gcd(p-1, k) == 1)");
+            throw new ArithmeticException("Incorrect number K. (Need: gcd(p-1, k) == 1)");
         }
 
 
