@@ -50,15 +50,36 @@ public class Elgamal {
         return b & 0xFF;
     }
 
-    public int[] bytesToInts(byte buf[]) {
-        int intArr[] = new int[buf.length / 4];
-        int offset = 0;
-        for(int i = 0; i < intArr.length; i++) {
-            intArr[i] = (buf[3 + offset] & 0xFF) | ((buf[2 + offset] & 0xFF) << 8) |
-                    ((buf[1 + offset] & 0xFF) << 16) | ((buf[0 + offset] & 0xFF) << 24);
-            offset += 4;
+    public static int[] byte2int(byte[]src) {
+        int dstLength = src.length >>> 2;
+        int[]dst = new int[dstLength];
+
+        for (int i=0; i<dstLength; i++) {
+            int j = i << 2;
+            int x = 0;
+            x += (src[j++] & 0xff) << 0;
+            x += (src[j++] & 0xff) << 8;
+            x += (src[j++] & 0xff) << 16;
+            x += (src[j++] & 0xff) << 24;
+            dst[i] = x;
         }
-        return intArr;
+        return dst;
+    }
+
+
+    public static byte[] int2byte(int[]src) {
+        int srcLength = src.length;
+        byte[]dst = new byte[srcLength << 2];
+
+        for (int i=0; i<srcLength; i++) {
+            int x = src[i];
+            int j = i << 2;
+            dst[j++] = (byte) ((x >>> 0) & 0xff);
+            dst[j++] = (byte) ((x >>> 8) & 0xff);
+            dst[j++] = (byte) ((x >>> 16) & 0xff);
+            dst[j++] = (byte) ((x >>> 24) & 0xff);
+        }
+        return dst;
     }
 
     public int[] encrypt(byte[] plaintext) {
@@ -87,6 +108,12 @@ public class Elgamal {
     }
 
     public static void main(String[] args) {
+
+        int[] kek = byte2int(new byte[] {127, 15,10,20});
+        System.out.println(kek[0]);
+        byte[] mem = int2byte(kek);
+        kek = byte2int(mem);
+        System.out.println(kek[0]);
         Elgamal elgamal = new Elgamal(1061, 15, 17);
         int[] lol = elgamal.encrypt("Мем :))".getBytes());
         System.out.println("MSG:" + new String(elgamal.decrypt(lol)));
