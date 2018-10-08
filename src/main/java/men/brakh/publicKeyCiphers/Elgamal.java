@@ -3,10 +3,9 @@ package men.brakh.publicKeyCiphers;
 import java.util.HashMap;
 
 public class Elgamal {
-    private long p;
-    private long x; // 1 < x < p - 1
-    private long g; // Первообразный корень
-    private long y; // y = g^x mod p.
+
+    private ElgamalOpenKey openKey; // p - простое число, g - первообр. корень, y = g^x mod p.
+    private long privateKey; // Закрытый ключ 1 < x < p - 1
 
     private long k; // Сессионный ключ
 
@@ -26,24 +25,22 @@ public class Elgamal {
         }
 
 
-        this.p = p;
-        this.x = x;
-        this.k = k;
+        this.privateKey = x; // Закрытый ключ
 
-        g = OpenKeyCiphersMath.getPrimitive(p);
-        y = OpenKeyCiphersMath.power(g,x,p);
+        this.k = k; // Сессионный ключ
+
+        long g = OpenKeyCiphersMath.getPrimitive(p);
+        long y = OpenKeyCiphersMath.power(g,x,p);
+
+        openKey = new ElgamalOpenKey(p,g,y);
     }
 
-    public HashMap<Character, Long> getPublicKey() {
-        HashMap<Character, Long> publicKey = new HashMap<Character, Long>();
-        publicKey.put('p', p);
-        publicKey.put('g', g);
-        publicKey.put('y', y);
-        return publicKey;
+    public ElgamalOpenKey getPublicKey() {
+        return openKey;
     }
 
     public long getPrivateKey() {
-        return x;
+        return privateKey;
     }
 
     public static int unsignedToBytes(byte b) {
@@ -84,9 +81,16 @@ public class Elgamal {
 
     public int[] encrypt(byte[] plaintext) {
         int[] ciphertext = new int[2*plaintext.length];
+
+        long p = openKey.getP();
+        long g = openKey.getG();
+        long y = openKey.getY();
+
         for(int i = 0; i < ciphertext.length; i += 2) {
             if(plaintext[i/2] >= p) {
-                throw new ArithmeticException();
+                throw new ArithmeticException(String.format("Encountered byte value of the source text " +
+                        "m[%d] = %d, greater than the number p = %d", i/2, plaintext[i/2], p)
+                );
             }
             ciphertext[i] = (int) OpenKeyCiphersMath.power(g,k,p); // a
             ciphertext[i + 1] = (int) ((OpenKeyCiphersMath.power(y,k,p) * unsignedToBytes(plaintext[i/2])) % p); // b
@@ -98,26 +102,16 @@ public class Elgamal {
 
     public byte[] decrypt(int[] ciphertext) {
         byte[] plaintext = new byte[ciphertext.length/2];
+
+        long p = openKey.getP();
+
         for(int i = 0; i < ciphertext.length ; i += 2) {
             int a = ciphertext[i];
             int b = ciphertext[i + 1];
-            plaintext[i/2] = (byte) ( b * OpenKeyCiphersMath.power(OpenKeyCiphersMath.power(a,x, p),
+            plaintext[i/2] = (byte) ( b * OpenKeyCiphersMath.power(OpenKeyCiphersMath.power(a,privateKey, p),
                                 OpenKeyCiphersMath.phi((int) p)-1, p) % p);
         }
         return plaintext;
     }
-
-    public static void main(String[] args) {
-
-        int[] kek = byte2int(new byte[] {127, 15,10,20});
-        System.out.println(kek[0]);
-        byte[] mem = int2byte(kek);
-        kek = byte2int(mem);
-        System.out.println(kek[0]);
-        Elgamal elgamal = new Elgamal(1061, 15, 17);
-        int[] lol = elgamal.encrypt("Мем :))".getBytes());
-        System.out.println("MSG:" + new String(elgamal.decrypt(lol)));
-    }
-
 
 }
