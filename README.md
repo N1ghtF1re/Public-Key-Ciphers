@@ -15,18 +15,18 @@ The library contains three public key ciphers: Elgamal
 ## Class Elgamal: 
 
 ### Constructors: 
-- Elgamal(long p, long x, long k). p - prime number, x - Private key, number of range (1; p - 1), Session key, mutually prime with p number of range (1; p - 1)
+- **Elgamal(long p, long x, long k)** . p - prime number, x - Private key, number of range (1; p - 1), Session key, mutually prime with p number of range (1; p - 1)
 
 ### Methods: 
-- encrypt(byte[] plaintext) - Encodes an array of bytes
+- **encrypt(byte[] plaintext)** - Encodes an array of bytes
   - One byte of source array turns into two elements of the array of ints.
      - CIPHERTEXT[i] = p^k mod g
      - CIPHERTEXT[i+1] = (y^k * PlAINTEXT[i/2]) mod p
-- decrypt(byte[]) - Decodes an array of ints
+- **decrypt(byte[])** - Decodes an array of ints
   - Two elements of ciphertext array (int[]) turns into one byte of plaintext array
     - (b = ciphertext[i + 1], a =  ciphertext[i])
     - PLAINTEXT[i/2] =  ( b * (a^x)^-1 ) mod p = (b * (a^x)^(phi(p) - 1)) mod p, phi - Euler function
-- getPublicKey() - return Public Key object (p, g, y)
+- **getPublicKey()** - return Public Key object (p, g, y)
 
 
 
