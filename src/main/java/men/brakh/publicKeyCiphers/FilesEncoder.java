@@ -3,12 +3,24 @@ import men.brakh.publicKeyCiphers.Elgamal.Elgamal;
 
 import java.io.*;
 
+/**
+ * A class that implements file encryption and decryption
+ * @author Pankratiew Alexandr
+ */
+
 public class FilesEncoder {
     Elgamal cipher;
+
     public FilesEncoder(Elgamal cipher) {
         this.cipher = cipher;
     }
 
+    /**
+     * Return Returns an array of bytes of the source file.
+     * @param filePath The path to the file
+     * @return An array of bytes of the source file.
+     * @throws IOException
+     */
     private byte[] readFile(String filePath) throws IOException {
         byte[] content;
         try{
@@ -21,6 +33,13 @@ public class FilesEncoder {
         return content;
 
     }
+
+    /**
+     * Write array of bytes (content) to the file
+     * @param filePath The path to the file
+     * @param content The byte array to write to the file.
+     * @throws IOException
+     */
     private void writeFile(String filePath, byte[] content) throws IOException {
 
         try{
