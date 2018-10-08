@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Frame for test Public Key Cuphers
@@ -94,9 +95,6 @@ public class PublicKeyCiphersFrame extends JFrame {
 
     class ButtonEventListener implements ActionListener {
         public void actionPerformed(ActionEvent e){
-            long p = Long.parseLong(inpP.getText());
-            long x = Long.parseLong(inpX.getText());
-            long k = Long.parseLong(inpK.getText());
 
             final String succesMessage = "%s!\n\nSource bytes:\n%s\n\nResult:\n%s\n\n %s";
             final String publicKeyMsg = "Public key: p = %d, g = %d, y = %d";
@@ -106,14 +104,22 @@ public class PublicKeyCiphersFrame extends JFrame {
             String result;
             String additionalInfo;
             try {
+                // PUBLIC KEY:
+                long p = Long.parseLong(inpP.getText());
+                long x = Long.parseLong(inpX.getText());
+                long k = Long.parseLong(inpK.getText());
+
+                // CREATE ELGAMAL CIPHER OBJECT
                 Elgamal elgamal = new Elgamal(p,x,k);
+
                 FilesEncoder filesEncoder = new FilesEncoder(elgamal);
+
                 if (radioIsEncrypt.isSelected()) {
                     title = "Encrypted";
                     String[] res = filesEncoder.encode(currentPath);
 
-                    sourceBytes = res[0];
-                    result = res[1];
+                    sourceBytes = res[0]; // res[0] - PlainBytes
+                    result = res[1]; // res[1] - CipherBytes
 
                     ElgamalPublicKey key = elgamal.getPublicKey();
                     additionalInfo = String.format(publicKeyMsg, key.getP(), key.getG(), key.getY());
@@ -121,15 +127,19 @@ public class PublicKeyCiphersFrame extends JFrame {
                     title = "Decrypted";
                     String[] res = filesEncoder.decode(currentPath);
 
-                    sourceBytes = res[1];
-                    result = res[0];
+                    sourceBytes = res[1]; // res[1] - CipherBytes
+                    result = res[0]; // res[0] - PlainBytes
                     additionalInfo = String.format(privateKeyMsg, elgamal.getPrivateKey());
                 }
 
                 String message = String.format(succesMessage, title, sourceBytes, result, additionalInfo);
                 dialogMSG(message, title);
-            } catch (Exception e2) {
-                System.out.println(e2.getMessage());
+            } catch (IOException exception1) {
+                dialogMSG("File not found", "ERROR");
+            } catch (ArithmeticException exception2) {
+                dialogMSG(exception2.getMessage(), "ERROR");
+            } catch (NumberFormatException exception3) {
+                dialogMSG("Incorrect data entered:\n" + exception3.getMessage(), "ERROR");
             }
         }
     }
