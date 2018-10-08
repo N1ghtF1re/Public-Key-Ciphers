@@ -1,5 +1,7 @@
 package men.brakh.publicKeyCiphers;
 
+import men.brakh.publicKeyCiphers.Elgamal.Elgamal;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

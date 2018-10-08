@@ -1,4 +1,6 @@
-package men.brakh.publicKeyCiphers;
+package men.brakh.publicKeyCiphers.Elgamal;
+
+import men.brakh.publicKeyCiphers.PublicKeyCiphersMath;
 
 /**
  * Elgamal Public Key class

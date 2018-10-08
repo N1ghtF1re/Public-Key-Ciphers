@@ -1,4 +1,6 @@
 package men.brakh.publicKeyCiphers;
+import men.brakh.publicKeyCiphers.Elgamal.Elgamal;
+
 import java.io.*;
 
 public class FilesEncoder {
@@ -6,7 +8,7 @@ public class FilesEncoder {
     public FilesEncoder(Elgamal cipher) {
         this.cipher = cipher;
     }
-    
+
     private byte[] readFile(String filePath) throws IOException {
         byte[] content;
         try{
