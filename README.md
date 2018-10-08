@@ -18,7 +18,7 @@ The library contains three public key ciphers: Elgamal
 - Elgamal(long p, long x, long k). p - prime number, x - Private key, number of range (1; p - 1), Session key, mutually prime with p number of range (1; p - 1)
 
 ### Methods: 
-- encrypt(byte[] plaintext) Encodes an array of bytes
+- encrypt(byte[] plaintext) - Encodes an array of bytes
   - One byte of source array turns into two elements of the array of ints.
      - CIPHERTEXT[i] = p^k mod g
      - CIPHERTEXT[i+1] = (y^k * PlAINTEXT[i/2]) mod p
