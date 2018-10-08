@@ -19,13 +19,13 @@ The library contains three public key ciphers: Elgamal
 
 ### Methods: 
 - encrypt(byte[] plaintext) Encodes an array of bytes
--- One byte of source array turns into two elements of the array of ints.
---- CIPHERTEXT[i] = p^k mod g
---- CIPHERTEXT[i+1] = (y^k * PlAINTEXT[i/2]) mod p
+  - One byte of source array turns into two elements of the array of ints.
+     - CIPHERTEXT[i] = p^k mod g
+     - CIPHERTEXT[i+1] = (y^k * PlAINTEXT[i/2]) mod p
 - decrypt(byte[]) - Decodes an array of ints
--- Two elements of ciphertext array (int[]) turns into one byte of plaintext array
---- (b = ciphertext[i + 1], a =  ciphertext[i])
---- PLAINTEXT[i/2] =  ( b * (a^x)^-1 ) mod p = (b * (a^x)^(phi(p) - 1)) mod p, phi - Euler function
+  - Two elements of ciphertext array (int[]) turns into one byte of plaintext array
+    - (b = ciphertext[i + 1], a =  ciphertext[i])
+    - PLAINTEXT[i/2] =  ( b * (a^x)^-1 ) mod p = (b * (a^x)^(phi(p) - 1)) mod p, phi - Euler function
 - getPublicKey() - return Public Key object (p, g, y)
 
 
