@@ -10,6 +10,7 @@ import java.io.*;
 
 public class FilesEncoder {
     Elgamal cipher;
+    final int bytesCount = 15;
 
     public FilesEncoder(Elgamal cipher) {
         this.cipher = cipher;
@@ -62,21 +63,50 @@ public class FilesEncoder {
         return filePath + "-key.txt";
     }
 
+    private String getCipherString(int[] arr, int bytesCount) {
+        bytesCount *= 2;
+        if(bytesCount > arr.length) bytesCount = arr.length;
+        final String elementFormat = "   %d %d    ";
 
+        StringBuilder result = new StringBuilder();
 
-    public void encode(String filePath) throws IOException {
+        for(int i = 0; i < bytesCount; i +=2) {
+            result.append(String.format(elementFormat, arr[i], arr[i+1]));
+        }
+        return result.toString();
+    }
+
+    private String getPlainString(byte[] arr, int bytesCount) {
+        if(bytesCount > arr.length) bytesCount = arr.length;
+        final String elementFormat = "   %d    ";
+
+        StringBuilder result = new StringBuilder();
+
+        for(int i = 0; i < bytesCount; i++) {
+            result.append(String.format(elementFormat, Elgamal.unsignedToBytes(arr[i])));
+        }
+        return result.toString();
+    }
+
+    public String[] encode(String filePath) throws IOException {
         byte[] plainText = readFile(filePath);
         int[] cipherText = cipher.encrypt(plainText);
         writeFile(getOutEncodePath(filePath), Elgamal.int2byte(cipherText));
 
-        //return new String[]{strKey, strCipher, strPlain};
+        String plainStr = getPlainString(plainText, bytesCount);
+        String cipherStr = getCipherString(cipherText, bytesCount);
+
+        return new String[] {plainStr, cipherStr};
     }
 
-    public void decode(String filePath) throws IOException {
+    public String[] decode(String filePath) throws IOException {
         int[] cipherText = Elgamal.byte2int(readFile(filePath));
         byte[] plainText = cipher.decrypt(cipherText);
         writeFile(getOutDecodePath(filePath), plainText);
 
-       //return new String[]{strKey, plainStr, strCipher};
+        String plainStr = getPlainString(plainText, bytesCount);
+        String cipherStr = getCipherString(cipherText, bytesCount);
+
+        return new String[] {plainStr, cipherStr};
     }
 }

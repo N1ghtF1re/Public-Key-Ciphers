@@ -1,6 +1,7 @@
 package men.brakh.publicKeyCiphers;
 
 import men.brakh.publicKeyCiphers.Elgamal.Elgamal;
+import men.brakh.publicKeyCiphers.Elgamal.ElgamalPublicKey;
 
 import javax.swing.*;
 import java.awt.*;
@@ -89,19 +90,44 @@ public class PublicKeyCiphersFrame extends JFrame {
             }
         }
     }
+
+
     class ButtonEventListener implements ActionListener {
         public void actionPerformed(ActionEvent e){
             long p = Long.parseLong(inpP.getText());
             long x = Long.parseLong(inpX.getText());
             long k = Long.parseLong(inpK.getText());
+
+            final String succesMessage = "%s!\n\nSource bytes:\n%s\n\nResult:\n%s\n\n %s";
+            final String publicKeyMsg = "Public key: p = %d, g = %d, y = %d";
+            final String privateKeyMsg = "Private key: %d";
+            String title;
+            String sourceBytes;
+            String result;
+            String additionalInfo;
             try {
                 Elgamal elgamal = new Elgamal(p,x,k);
                 FilesEncoder filesEncoder = new FilesEncoder(elgamal);
                 if (radioIsEncrypt.isSelected()) {
-                    filesEncoder.encode(currentPath);
+                    title = "Encrypted";
+                    String[] res = filesEncoder.encode(currentPath);
+
+                    sourceBytes = res[0];
+                    result = res[1];
+
+                    ElgamalPublicKey key = elgamal.getPublicKey();
+                    additionalInfo = String.format(publicKeyMsg, key.getP(), key.getG(), key.getY());
                 } else {
-                    filesEncoder.decode(currentPath);
+                    title = "Decrypted";
+                    String[] res = filesEncoder.decode(currentPath);
+
+                    sourceBytes = res[1];
+                    result = res[0];
+                    additionalInfo = String.format(privateKeyMsg, elgamal.getPrivateKey());
                 }
+
+                String message = String.format(succesMessage, title, sourceBytes, result, additionalInfo);
+                dialogMSG(message, title);
             } catch (Exception e2) {
                 System.out.println(e2.getMessage());
             }
