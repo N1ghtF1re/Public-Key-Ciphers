@@ -2,7 +2,7 @@ package men.brakh.publicKeyCiphers;
 
 import static org.junit.Assert.*;
 
-public class OpenKeyCiphersMathTest {
+public class PublicKeyCiphersMathTest {
 
     private long badPow(int x, int y) {
         long res = 1;
@@ -20,7 +20,7 @@ public class OpenKeyCiphersMathTest {
             for(int j = 1; j < endPow; j++) {
                 for(int k = 3; k < end; k++) {
                     long needResult = (badPow(i, j)) % k; // i^j mod k
-                    long result = OpenKeyCiphersMath.power(i,j,k);
+                    long result = PublicKeyCiphersMath.power(i,j,k);
                     if(needResult != result) {
                         System.out.println(i);
                         System.out.println(j);

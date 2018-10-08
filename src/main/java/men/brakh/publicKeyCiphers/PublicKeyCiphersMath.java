@@ -3,7 +3,12 @@ package men.brakh.publicKeyCiphers;
 
 import java.util.ArrayList;
 
-public class OpenKeyCiphersMath {
+/**
+ * Math package for public key ciphers
+ * @author Pankratiew Alexandr
+ */
+
+public class PublicKeyCiphersMath {
 
     /**
      * Modular exponentiation

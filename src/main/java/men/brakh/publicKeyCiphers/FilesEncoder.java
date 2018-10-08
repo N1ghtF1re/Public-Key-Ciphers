@@ -6,7 +6,7 @@ public class FilesEncoder {
     public FilesEncoder(Elgamal cipher) {
         this.cipher = cipher;
     }
-
+    
     private byte[] readFile(String filePath) throws IOException {
         byte[] content;
         try{
@@ -47,7 +47,7 @@ public class FilesEncoder {
         byte[] plainText = readFile(filePath);
         int[] cipherText = cipher.encrypt(plainText);
         writeFile(getOutEncodePath(filePath), Elgamal.int2byte(cipherText));
-        
+
         //return new String[]{strKey, strCipher, strPlain};
     }
 

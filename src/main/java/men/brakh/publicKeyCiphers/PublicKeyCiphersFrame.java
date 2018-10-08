@@ -4,12 +4,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.io.File;
-import java.io.IOException;
 
-public class OpenKeyCiphersFrame extends JFrame {
+/**
+ * Frame for test Public Key Cuphers
+ * @author Pankratiew Alexandr
+ */
+
+public class PublicKeyCiphersFrame extends JFrame {
     private String currentPath;
 
     private JRadioButton radioIsEncrypt = new JRadioButton("Encode");
@@ -27,7 +29,7 @@ public class OpenKeyCiphersFrame extends JFrame {
 
     private JButton btnApply = new JButton("To do everything!\n");
 
-    public OpenKeyCiphersFrame() {
+    public PublicKeyCiphersFrame() {
         super("Perfect Elgamal encoder/decoder");
         this.setBounds(100,100,500,300);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -105,7 +107,7 @@ public class OpenKeyCiphersFrame extends JFrame {
     }
 
     public static void main(String[] args) {
-        OpenKeyCiphersFrame app = new OpenKeyCiphersFrame();
+        PublicKeyCiphersFrame app = new PublicKeyCiphersFrame();
         app.setVisible(true);
     }
 }
