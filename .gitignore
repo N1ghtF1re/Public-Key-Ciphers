@@ -5,3 +5,4 @@ target/
 *.decoded
 *.txt
 examples/
+*test
