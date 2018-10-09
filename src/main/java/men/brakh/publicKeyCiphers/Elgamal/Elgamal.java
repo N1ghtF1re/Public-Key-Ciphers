@@ -33,6 +33,9 @@ public class Elgamal {
         if(PublicKeyCiphersMath.gcd(p-1, k) != 1) {
             throw new ArithmeticException("Incorrect number K. (Need: gcd(p-1, k) == 1)");
         }
+        if(p <= 255) {
+            throw new ArithmeticException("Incorrect number P. (Must not be less than maximum byte value (255))");
+        }
 
 
         this.privateKey = x; // Private key
@@ -125,11 +128,6 @@ public class Elgamal {
         long y = publicKey.getY();
 
         for(int i = 0; i < ciphertext.length; i += 2) {
-            if(plaintext[i/2] >= p) {
-                throw new ArithmeticException(String.format("Encountered byte value of the source text " +
-                        "m[%d] = %d, greater than the number p = %d", i/2, plaintext[i/2], p)
-                );
-            }
             ciphertext[i] = (int) PublicKeyCiphersMath.power(g,k,p); // a
             ciphertext[i + 1] = (int) ((PublicKeyCiphersMath.power(y,k,p) * unsignedToBytes(plaintext[i/2])) % p); // b
         }
