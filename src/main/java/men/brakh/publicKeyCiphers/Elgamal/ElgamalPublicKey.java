@@ -11,9 +11,9 @@ public class ElgamalPublicKey {
     private long g;
     private long y;
 
-    public ElgamalPublicKey(long p, long x) {
+    public ElgamalPublicKey(long p, long x, long g) {
         this.p = p;
-        this.g = PublicKeyCiphersMath.getPrimitive(p); // Primitive root
+        this.g = g;
         this.y = PublicKeyCiphersMath.power(g,x,p); // y = g^x mod p
     }
 

@@ -2,6 +2,8 @@ package men.brakh.publicKeyCiphers.Elgamal;
 
 import men.brakh.publicKeyCiphers.PublicKeyCiphersMath;
 
+import java.util.List;
+
 /**
  * Elgamal Cipher Realisation
  * @author Pankratiew Alexandr
@@ -20,7 +22,7 @@ public class Elgamal {
      * @param x Private key, number of range (1; p - 1)
      * @param k Session key, mutually prime with p number of range (1; p - 1)
      */
-    public Elgamal(long p, long x, long k) {
+    public Elgamal(long p, long x, long k, int g) {
         if(!PublicKeyCiphersMath.isPrime(p)) {
             throw new ArithmeticException("Incorrect number P (It should be prime)");
         }
@@ -36,13 +38,16 @@ public class Elgamal {
         if(p <= 255) {
             throw new ArithmeticException("Incorrect number P. (Must not be less than maximum byte value (255))");
         }
-
+        List<Integer> primitiveRoots = PublicKeyCiphersMath.getPrimitiveRoots(p);
+        if(!primitiveRoots.contains(g)) {
+            throw new ArithmeticException("G is not a primitive root of p");
+        }
 
         this.privateKey = x; // Private key
 
         this.k = k; // Session key
 
-        publicKey = new ElgamalPublicKey(p, x); // Created Public Key. Public key - set(p,g,y). p - prime number, g - primitive root modulo p, y = g^x mod p.
+        publicKey = new ElgamalPublicKey(p, x, g); // Created Public Key. Public key - set(p,g,y). p - prime number, g - primitive root modulo p, y = g^x mod p.
     }
 
     /**

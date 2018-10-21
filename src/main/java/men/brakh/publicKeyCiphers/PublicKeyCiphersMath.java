@@ -1,7 +1,7 @@
 package men.brakh.publicKeyCiphers;
 
 
-import java.util.ArrayList;
+import java.util.*;
 
 /**
  * Math package for public key ciphers
@@ -83,6 +83,49 @@ public class PublicKeyCiphersMath {
             if (ok)  return res;
         }
         return -1;
+    }
+
+    public static Set<Integer> getDividers(long n) {
+        Set<Integer> divies = new HashSet<>();
+
+
+        for(int i = 2; i < n; i++) {
+            if (isPrime(i)) {
+                if(n % i == 0) {
+                    divies.add(i);
+                }
+            }
+        }
+
+        return divies;
+    }
+
+    public static void main(String[] args) {
+        getPrimitiveRoots(47);
+    }
+
+    public static List<Integer> getPrimitiveRoots(long p) {
+
+        List<Integer> primitiveRoots = new LinkedList<>();
+
+        Set<Integer> divies = getDividers(p-1);
+
+        Boolean flag;
+        for(int i = 2; i < p; i++) {
+            flag = true;
+            for (int div : divies) {
+                if( power(i, (p-1) / div, p) == 1) {
+                    flag = false;
+                    break;
+                }
+            }
+
+            if(flag) {
+                primitiveRoots.add(i);
+            }
+        }
+
+        return primitiveRoots;
     }
 
     /**

@@ -7,8 +7,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Frame for test Public Key Cuphers
@@ -31,6 +34,11 @@ public class PublicKeyCiphersFrame extends JFrame {
     private JLabel lblK = new JLabel("Enter number K (1 < k < p - 1, gcd(k, p-1) = 1): ");
     private JTextField inpK = new JTextField("17",40);
 
+    private JLabel lblG = new JLabel("Select prime root modulo  P:");
+
+    private JComboBox gSelect = new JComboBox();
+
+
     private JButton btnApply = new JButton("To do everything!\n");
 
     public PublicKeyCiphersFrame() {
@@ -39,9 +47,13 @@ public class PublicKeyCiphersFrame extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         Container container = this.getContentPane();
-        container.setLayout(new GridLayout(10,1));
+        container.setLayout(new GridLayout(12,1));
         container.add(lblP);
         container.add(inpP);
+        container.add(lblG);
+        container.add(gSelect);
+        inpP.addKeyListener(new InpPKeyListener());
+        updateG(Integer.valueOf(inpP.getText()));
         container.add(lblX);
         container.add(inpX);
         container.add(lblK);
@@ -64,6 +76,40 @@ public class PublicKeyCiphersFrame extends JFrame {
         btnSelectFile.addActionListener(new SelectFile());
         btnApply.addActionListener(new ButtonEventListener());
         container.add(btnApply);
+    }
+
+    private void updateG(int p_value) {
+        if(PublicKeyCiphersMath.isPrime(p_value)) {
+            java.util.List<Integer> primitivesRoot = PublicKeyCiphersMath.getPrimitiveRoots(p_value);
+            for(int g : primitivesRoot) {
+                gSelect.addItem(g);
+            }
+
+        }
+    }
+
+    private class InpPKeyListener implements KeyListener {
+        @Override
+        public void keyTyped(KeyEvent keyEvent) {
+
+        }
+
+        @Override
+        public void keyPressed(KeyEvent keyEvent) {
+
+        }
+
+        @Override
+        public void keyReleased(KeyEvent keyEvent) {
+            try {
+                gSelect.removeAllItems();
+                int p_value = Integer.valueOf(inpP.getText());
+                updateG(p_value);
+            } catch (NumberFormatException e) {
+                dialogMSG("Invalid p", "Error");
+            }
+            System.out.println(inpP.getText());
+        }
     }
 
     public String trimStr(String str) {
@@ -108,9 +154,11 @@ public class PublicKeyCiphersFrame extends JFrame {
                 long p = Long.parseLong(inpP.getText());
                 long x = Long.parseLong(inpX.getText());
                 long k = Long.parseLong(inpK.getText());
+                int g = (int) gSelect.getItemAt(gSelect.getSelectedIndex());
+                System.out.println(g);
 
                 // CREATE ELGAMAL CIPHER OBJECT
-                Elgamal elgamal = new Elgamal(p,x,k);
+                Elgamal elgamal = new Elgamal(p,x,k, g);
 
                 FilesEncoder filesEncoder = new FilesEncoder(elgamal);
 
