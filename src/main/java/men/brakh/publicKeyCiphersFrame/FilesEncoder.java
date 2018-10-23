@@ -1,7 +1,10 @@
-package men.brakh.publicKeyCiphers;
+package men.brakh.publicKeyCiphersFrame;
 import men.brakh.publicKeyCiphers.Elgamal.Elgamal;
+import sun.misc.IOUtils;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * A class that implements file encryption and decryption
@@ -25,9 +28,7 @@ public class FilesEncoder {
     private byte[] readFile(String filePath) throws IOException {
         byte[] content;
         try{
-            FileInputStream fis = new FileInputStream(new File(filePath));
-            content = fis.readAllBytes();
-            fis.close();
+            content =  Files.readAllBytes(Paths.get(filePath));
         } catch (Exception e) {
             throw new IOException(e);
         }
@@ -63,50 +64,28 @@ public class FilesEncoder {
         return filePath + "-key.txt";
     }
 
-    private String getCipherString(int[] arr, int bytesCount) {
-        bytesCount *= 2;
-        if(bytesCount > arr.length) bytesCount = arr.length;
-        final String elementFormat = "   %d %d    ";
-
-        StringBuilder result = new StringBuilder();
-
-        for(int i = 0; i < bytesCount; i +=2) {
-            result.append(String.format(elementFormat, arr[i], arr[i+1]));
-        }
-        return result.toString();
-    }
-
-    private String getPlainString(byte[] arr, int bytesCount) {
-        if(bytesCount > arr.length) bytesCount = arr.length;
-        final String elementFormat = "   %d    ";
-
-        StringBuilder result = new StringBuilder();
-
-        for(int i = 0; i < bytesCount; i++) {
-            result.append(String.format(elementFormat, Elgamal.unsignedToBytes(arr[i])));
-        }
-        return result.toString();
-    }
 
     public String[] encode(String filePath) throws IOException {
         byte[] plainText = readFile(filePath);
         int[] cipherText = cipher.encrypt(plainText);
-        writeFile(getOutEncodePath(filePath), Elgamal.int2byte(cipherText));
+        String newPath = getOutEncodePath(filePath);
+        writeFile(newPath, Elgamal.int2byte(cipherText));
 
-        String plainStr = getPlainString(plainText, bytesCount);
-        String cipherStr = getCipherString(cipherText, bytesCount);
+        BytesConverter bytesConverter = new BytesConverter();
+        String cipherStr = bytesConverter.intArray2String(cipherText);
 
-        return new String[] {plainStr, cipherStr};
+        return new String[] {cipherStr, String.valueOf(cipher.getPublicKey().getY()), newPath};
     }
 
     public String[] decode(String filePath) throws IOException {
         int[] cipherText = Elgamal.byte2int(readFile(filePath));
         byte[] plainText = cipher.decrypt(cipherText);
-        writeFile(getOutDecodePath(filePath), plainText);
+        String newPath = getOutDecodePath(filePath);
+        writeFile(newPath, plainText);
 
-        String plainStr = getPlainString(plainText, bytesCount);
-        String cipherStr = getCipherString(cipherText, bytesCount);
+        BytesConverter bytesConverter = new BytesConverter();
+        String plainStr = bytesConverter.byteArray2String(plainText);
 
-        return new String[] {plainStr, cipherStr};
+        return new String[] {plainStr, String.valueOf(cipher.getPublicKey().getY()), newPath};
     }
 }

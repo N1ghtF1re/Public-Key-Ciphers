@@ -105,7 +105,6 @@ public class PublicKeyCiphersMath {
     }
 
     public static List<Integer> getPrimitiveRoots(long p) {
-
         List<Integer> primitiveRoots = new LinkedList<>();
 
         Set<Integer> divies = getDividers(p-1);
