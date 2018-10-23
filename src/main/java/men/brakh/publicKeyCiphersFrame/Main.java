@@ -8,11 +8,16 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+    private final int height = 720;
+    private final int width = 1280;
+
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view.fxml"));
-        primaryStage.setTitle("Progressive Kasiski");
-        primaryStage.setScene(new Scene(root, 1280, 720));
+        primaryStage.setTitle("Public Key Ciphers");
+        primaryStage.setScene(new Scene(root, width, height));
+        primaryStage.setMinHeight(height);
+        primaryStage.setMinWidth(width);
         primaryStage.show();
     }
 
