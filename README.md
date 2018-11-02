@@ -20,7 +20,7 @@ The library contains three public key ciphers: Elgamal
 ### Methods: 
 - **encrypt(byte[] plaintext)** - Encodes an array of bytes
   - One byte of source array turns into two elements of the array of ints.
-     - CIPHERTEXT[i] = p^k mod g
+     - CIPHERTEXT[i] = g^k mod p
      - CIPHERTEXT[i+1] = (y^k * PlAINTEXT[i/2]) mod p
 - **decrypt(byte[])** - Decodes an array of ints
   - Two elements of ciphertext array (int[]) turns into one byte of plaintext array
