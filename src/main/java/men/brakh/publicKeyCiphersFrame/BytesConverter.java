@@ -10,7 +10,6 @@ public class BytesConverter {
         int count = arr.length > limit ? limit : arr.length;
 
         for(int i = 0; i < count; i++) {
-
             result.append(String.format(elementFormat,  Integer.toUnsignedLong(arr[i])));
         }
         if(limit == count) {

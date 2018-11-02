@@ -58,33 +58,6 @@ public class PublicKeyCiphersMath {
     }
 
 
-    /**
-     * Returns the first primitive root
-     * @param p - module
-     * @return primitive root
-     */
-    public static int getPrimitive (long p) {
-        ArrayList<Long> fact = new ArrayList<Long>();
-        long phi = p-1;
-        long n = phi;
-        for (long i=2; i*i<=n; ++i)
-            if (n % i == 0) {
-                fact.add(i);
-                while (n % i == 0)
-                    n /= i;
-            }
-        if (n > 1)
-            fact.add(n);
-
-        for (int res=2; res<=p; ++res) {
-            Boolean ok = true;
-            for (int i=0; (i<fact.size()) && ok; ++i)
-                ok &= power (res, phi / fact.get(i), p) != 1;
-            if (ok)  return res;
-        }
-        return -1;
-    }
-
     public static Set<Integer> getDividers(long n) {
         Set<Integer> divies = new HashSet<>();
 
@@ -98,10 +71,6 @@ public class PublicKeyCiphersMath {
         }
 
         return divies;
-    }
-
-    public static void main(String[] args) {
-        getPrimitiveRoots(47);
     }
 
     public static List<Integer> getPrimitiveRoots(long p) {

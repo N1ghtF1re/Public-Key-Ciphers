@@ -26,6 +26,10 @@ public class Elgamal {
         if(!PublicKeyCiphersMath.isPrime(p)) {
             throw new ArithmeticException("Incorrect number P (It should be prime)");
         }
+
+        if(p > Integer.MAX_VALUE) {
+            throw new ArithmeticException("P is too long");
+        }
         if((x >= p - 1) || (x <= 1)) {
             throw new ArithmeticException("Incorrect number X. (Need: 1 < x < p - 1)");
         }
