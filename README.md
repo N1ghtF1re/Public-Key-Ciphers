@@ -10,7 +10,7 @@
 </p>
 
 ## About the library
-The library contains three public key ciphers: Elgamal
+The library contains one public key ciphers: Elgamal
 
 ## Class Elgamal: 
 
